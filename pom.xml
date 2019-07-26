@@ -7,6 +7,7 @@
     <groupId>mql5</groupId>
     <artifactId>mql5</artifactId>
     <version>1.0.0</version>
+
     <build>
         <plugins>
             <plugin>
@@ -20,13 +21,25 @@
         </plugins>
     </build>
 
+
     <properties>
         <!-- Versions of libraries: Dependencies -->
         <cucumber.version>1.2.5</cucumber.version>
         <cucumber.jvm.version>1.0.5</cucumber.jvm.version>
         <cucumber.html.version>0.2.3</cucumber.html.version>
         <junit.version>4.12</junit.version>
+        <selenium.version>3.141.59</selenium.version>
+        <selenide.version>5.2.6</selenide.version>
     </properties>
+
+
+    <developers>
+        <developer>
+            <id>klymmalakhov</id>
+            <name>Klyment Malakhov</name>
+            <email>malahov.klim@gmail.com</email>
+        </developer>
+    </developers>
 
 
     <dependencies>
@@ -57,7 +70,6 @@
             <version>${cucumber.html.version}</version>
         </dependency>
 
-
         <!-- test frameworks -->
         <dependency>
             <groupId>junit</groupId>
@@ -65,7 +77,24 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
 
+
+        <!--selenium -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
     </dependencies>
 
 
