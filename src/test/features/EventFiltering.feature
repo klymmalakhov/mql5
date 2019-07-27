@@ -2,7 +2,8 @@
 Feature: Event filtering
 
   Scenario Outline: As USER I want be able to filter the events
-  THEN open details page with corresponding data
+    WHEN I use the filter form
+    THEN open details page with corresponding data
 
     Given I open the Economic calendar page page in "<browser for test>" browser
     When I select Current month in Period filter block

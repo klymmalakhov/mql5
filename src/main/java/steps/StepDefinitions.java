@@ -33,29 +33,28 @@ public class StepDefinitions {
 
 
     @And("^I select CHF in Currencies filter block$")
-    public void iSelectCHFInCurrenciesFilterBlock()  {
+    public void iSelectCHFInCurrenciesFilterBlock() {
         eventListPage.filterByCHFCurrency();
-
     }
 
     @When("^I open first event in the list$")
     public void iOpenEventNumberInTheEventList() {
         eventListPage.openFirstEventFromList();
-
     }
+
     @Then("^I validate that Label Importance has \"([^\"]*)\" value$")
     public void iValidateThatLabelImportanceHasValue(String importanceValue) {
         eventDetailsPage.validateImportanceValue(importanceValue);
     }
 
     @Then("^I validate that Label Country has \"([^\"]*)\" value$")
-    public void iValidateThatLabelCountryHasValue(String countryValue)  {
+    public void iValidateThatLabelCountryHasValue(String countryValue) {
         eventDetailsPage.validateCountryValue(countryValue);
     }
 
     @Then("^I save the events for the last \"([^\"]*)\" months$")
     public void iSaveTheEventsForTheLastMonths(String monthNumber) {
-
+        eventDetailsPage.saveTheEvents(Integer.parseInt(monthNumber));
     }
 
 }
