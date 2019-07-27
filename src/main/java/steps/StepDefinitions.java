@@ -1,19 +1,14 @@
 package steps;
 
-import cucumber.api.DataTable;
-
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-
 import pages.EventDetailsPage;
 import pages.EventListPage;
 
-import java.util.concurrent.TimeUnit;
+import static com.codeborne.selenide.Selenide.open;
 
-
-import static com.codeborne.selenide.Selenide.*;
 
 public class StepDefinitions {
 
@@ -43,21 +38,24 @@ public class StepDefinitions {
 
     }
 
-    @When("^I open event number \"([^\"]*)\" in the event list$")
-    public void iOpenEventNumberInTheEventList(String eventNumber) {
+    @When("^I open first event in the list$")
+    public void iOpenEventNumberInTheEventList() {
+        eventListPage.openFirstEventFromList();
 
     }
+    @Then("^I validate that Label Importance has \"([^\"]*)\" value$")
+    public void iValidateThatLabelImportanceHasValue(String importanceValue) {
+        eventDetailsPage.validateImportanceValue(importanceValue);
+    }
 
-    @Then("^I validate that the following elements have a values$")
-    public void iValidateThatTheFollowingElementsHaveAValues(DataTable elementTable) {
-
+    @Then("^I validate that Label Country has \"([^\"]*)\" value$")
+    public void iValidateThatLabelCountryHasValue(String countryValue)  {
+        eventDetailsPage.validateCountryValue(countryValue);
     }
 
     @Then("^I save the events for the last \"([^\"]*)\" months$")
     public void iSaveTheEventsForTheLastMonths(String monthNumber) {
 
     }
-
-
 
 }

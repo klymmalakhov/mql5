@@ -1,21 +1,24 @@
 package pages;
 
-import com.codeborne.selenide.Condition;
+
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Selenide.$;
+
 
 public class EventDetailsPage extends BasePage {
 
-    private final static By AMOUNT_INPUT = By.id("main_amount");
+    //LABELS
+    private final static By COUNTRY_CURRENCY_LABEL = By.xpath("//*[@class='economic-calendar__event-header-currency']");
+    private final static By IMPORTANCE_LABEL = By.xpath("//td[contains(@class,'event-table__importance')]");
 
 
-
-    public EventDetailsPage inputAmountValue(String amount) {
-        $(AMOUNT_INPUT).sendKeys(amount);
-        return this;
+    public void validateImportanceValue(String expectedImportanceValue) {
+        $(IMPORTANCE_LABEL).shouldHave(exactText(expectedImportanceValue));
     }
 
-
-
+    public void validateCountryValue(String countryValue) {
+        $(COUNTRY_CURRENCY_LABEL).shouldHave(exactText(countryValue));
+    }
 }
