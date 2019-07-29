@@ -3,6 +3,8 @@ package pages;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,6 +17,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 
 public class EventDetailsPage extends BasePage {
+
+    private final Logger log = LoggerFactory.getLogger(EventDetailsPage.class);
 
     //LABELS
     private final static By COUNTRY_CURRENCY_LABEL = By.xpath("//*[@class='economic-calendar__event-header-currency']");
@@ -31,57 +35,89 @@ public class EventDetailsPage extends BasePage {
     private final static String HISTORY_PAGINATOR_XPATH = "//div[@class='paginatorEx']/a[contains(text(),%s)]";
 
     public void validateImportanceValue(String expectedImportanceValue) {
-        $(IMPORTANCE_LABEL).shouldHave(exactText(expectedImportanceValue));
+        $(IMPORTANCE_LABEL).shouldHave(exactText(expectedImportanceValue.toUpperCase()));
     }
 
     public void validateCountryValue(String countryValue) {
-        $(COUNTRY_CURRENCY_LABEL).shouldHave(exactText(countryValue));
+        String expectedCurrencyValue = countryValue.replace(" -", ",");
+        $(COUNTRY_CURRENCY_LABEL).shouldHave(exactText(expectedCurrencyValue));
     }
 
     private void clickOnPageInHistoryByNumber(int pageNumber) {
         if ($(By.xpath(String.format(HISTORY_PAGINATOR_XPATH, pageNumber))).isDisplayed()) {
+            log.info("Switching to page number '{}' ", pageNumber);
             $(By.xpath(String.format(HISTORY_PAGINATOR_XPATH, pageNumber))).click();
             $(By.xpath(String.format(HISTORY_PAGINATOR_XPATH, pageNumber)))
                     .shouldHave(attribute("class", "selected"));
+        } else {
+            log.warn("There's no page number '{}' at the page", pageNumber);
         }
     }
 
     private String getHistoryOneItemPreviousValueIfPresent(int itemCount) {
         if ($(By.xpath(String.format(HISTORY_ONE_ITEM_PREVIOUS_XPATH, itemCount))).isDisplayed()) {
+            log.info("Gathering the Previous Value of one item that has '{}' number", itemCount);
             return $(By.xpath(String.format(HISTORY_ONE_ITEM_PREVIOUS_XPATH, itemCount))).getText();
         }
+        log.warn("There's no Previous value for item that has {} number", itemCount);
         return "";
     }
 
     private String getHistoryOneItemForecastValueIfPresent(int itemCount) {
         if ($(By.xpath(String.format(HISTORY_ONE_ITEM_FORECAST_XPATH, itemCount))).isDisplayed()) {
+            log.info("Gathering the Forecast Value of one item that has '{}' number", itemCount);
             return $(By.xpath(String.format(HISTORY_ONE_ITEM_FORECAST_XPATH, itemCount))).getText();
         }
+        log.warn("There's no Forecast value for item that has {} number", itemCount);
         return "";
     }
 
     private String getHistoryOneItemActualValueIfPresent(int itemCount) {
         if ($(By.xpath(String.format(HISTORY_ONE_ITEM_ACTUAL_XPATH, itemCount))).isDisplayed()) {
+            log.info("Gathering the Actual Value of one item that has '{}' number", itemCount);
             return $(By.xpath(String.format(HISTORY_ONE_ITEM_ACTUAL_XPATH, itemCount))).getText();
         }
+        log.warn("There's no Actual value for item that has {} number", itemCount);
         return "";
     }
 
     private String getHistoryOneItemDateValueIfPresent(int itemCount) {
         if ($(By.xpath(String.format(HISTORY_ONE_ITEM_DATE_XPATH, itemCount))).isDisplayed()) {
+            log.info("Gathering the Date Value of one item that has '{}' number", itemCount);
             return $(By.xpath(String.format(HISTORY_ONE_ITEM_DATE_XPATH, itemCount))).getText();
         }
+        log.warn("There's no Date value for item that has {} number", itemCount);
         return "";
     }
 
     public void saveTheEvents(int monthNumber) {
+        String fileName = "savedData.txt";
+        log.info("Open the history content");
         $(HISTORY_CONTENT_LINK).click();
-        List<String> historyList;
         long endOfPeriodInMs = getEndOfPeriodInMilliSeconds(monthNumber);
-        historyList = getHistoryDataFromThePage(endOfPeriodInMs);
-        System.out.println(historyList);
+        log.info("The system time in millisecond in past for '{}' months is '{}' ", monthNumber, endOfPeriodInMs);
+        List<String> historyList = getHistoryDataFromThePage(endOfPeriodInMs);
+        log.info("Saving the history data in the {} file", fileName);
+        saveDataInTheFile(historyList, fileName);
     }
 
+    /**
+     * Saving the data in the file regarding the required format
+     *
+     * @param historyList data that should be saved
+     * @param fileName the file, where the data are saved
+     */
+    private void saveDataInTheFile(List<String> historyList, String fileName) {
+    }
+
+    /**
+     * Gathering the values of Date, Actual, Forecast, Previous for all available items on the page.
+     * The period is from now till @endOfPeriodInMs in Milliseconds.
+     * The date in milliseconds is specified in the 'data-date' tag of each history item
+     *
+     * @param endOfPeriodInMs  is end of the search period
+     * @return List of values, separated by item
+     */
     private List<String> getHistoryDataFromThePage(long endOfPeriodInMs) {
         int pageCount = 1;
         int itemCount = 1;
@@ -112,6 +148,12 @@ public class EventDetailsPage extends BasePage {
         return result;
     }
 
+    /**
+     * Calculate the system time in millisecond from now till @mothNumber in past
+     *
+     * @param monthNumber - the number of month that we should take from the past
+     * @return system time in ms from this moment till @mothNumber in past
+     */
     private long getEndOfPeriodInMilliSeconds(int monthNumber) {
         LocalDateTime date = LocalDateTime.now().minusMonths(monthNumber);
         return date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();

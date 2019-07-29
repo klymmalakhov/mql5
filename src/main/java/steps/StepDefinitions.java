@@ -7,6 +7,8 @@ import cucumber.api.java.en.When;
 import pages.EventDetailsPage;
 import pages.EventListPage;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.codeborne.selenide.Selenide.open;
 
 
@@ -21,20 +23,20 @@ public class StepDefinitions {
         open("https://www.mql5.com/en/economic-calendar", EventListPage.class);
     }
 
-    @When("^I select Current month in Period filter block$")
-    public void iSelectInPeriodFilterBlock() {
-        eventListPage.filterByCurrentWeek();
+    @When("^I select \"([^\"]*)\" in Period filter block$")
+    public void iSelectInPeriodFilterBlock(String period) {
+        eventListPage.filterByCurrentWeek(period);
     }
 
-    @And("^I select Medium in Importance filter block$")
-    public void iSelectMediumInImportanceFilterBlock() {
-        eventListPage.filterByMediumImportance();
+    @And("^I select \"([^\"]*)\" in Importance filter block$")
+    public void iSelectMediumInImportanceFilterBlock(String importance) {
+        eventListPage.filterByImportance(importance);
     }
 
 
-    @And("^I select CHF in Currencies filter block$")
-    public void iSelectCHFInCurrenciesFilterBlock() {
-        eventListPage.filterByCHFCurrency();
+    @And("^I select \"([^\"]*)\" in Currencies filter block$")
+    public void iSelectCHFInCurrenciesFilterBlock(String currency) {
+        eventListPage.filterByCurrency(currency);
     }
 
     @When("^I open first event in the list$")
@@ -55,6 +57,14 @@ public class StepDefinitions {
     @Then("^I save the events for the last \"([^\"]*)\" months$")
     public void iSaveTheEventsForTheLastMonths(String monthNumber) {
         eventDetailsPage.saveTheEvents(Integer.parseInt(monthNumber));
+    }
+
+    void pause () {
+        try {
+            TimeUnit.MINUTES.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

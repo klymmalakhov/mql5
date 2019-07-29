@@ -2,18 +2,18 @@
 Feature: Event filtering
 
   Scenario Outline: As USER I want be able to filter the events
-    WHEN I use the filter form
-    THEN open details page with corresponding data
+  WHEN I use the filter form
+  THEN open details page with corresponding data
 
     Given I open the Economic calendar page page in "<browser for test>" browser
-    When I select Current month in Period filter block
-    And I select Medium in Importance filter block
-    And I select CHF in Currencies filter block
+    When I select "<filter period>" in Period filter block
+    And I select "<filter importance>" in Importance filter block
+    And I select "<filter currency>" in Currencies filter block
     And I open first event in the list
-    Then I validate that Label Importance has "<label importance value>" value
-    Then I validate that Label Country has "<label country value>" value
+    Then I validate that Label Importance has "<filter importance>" value
+    Then I validate that Label Country has "<filter currency>" value
     Then I save the events for the last "12" months
-#MEDIUM
+
     Examples:
-      | browser for test | label importance value | label country value |
-      | Chrome           | LOW                    | CHF, Swiss frank    |
+      | browser for test | filter importance | filter currency   | filter period |
+      | Chrome           | Medium            | CHF - Swiss frank | Current Month |
