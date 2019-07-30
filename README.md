@@ -55,19 +55,27 @@ https://www.mql5.com/en/economic-calendar
 * Note: Rest Client should use Googlebot user agent in headers when working with the API.
 
 
+## **RESULT**
+
 ##### **HOW TO RUN**
+Execute maven command
 
 ```sh
 $ mvn clean test
-
 ```
 
-
-##### **HOW TO GET REPORT**
+##### **HOW TO GET LOGS**
+Read the mylogs.log file
 
 ```sh
+less mylog.log
+```  
 
+##### **HOW TO GET HTML REPORT**
+Open index.html file that is located target/site/cucumber-pretty
 
+```sh
+target/site/cucumber-pretty/index.html
 ```  
 
 
