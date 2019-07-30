@@ -1,4 +1,4 @@
-## **MTQL5 JAVA autotests**
+# **MTQL5 JAVA autotests**
 
 ### The task:
 
@@ -55,7 +55,7 @@ https://www.mql5.com/en/economic-calendar
 * Note: Rest Client should use Googlebot user agent in headers when working with the API.
 
 
-## **RESULT**
+# **RESULT**
 
 ##### **HOW TO RUN**
 Execute maven command
@@ -78,5 +78,12 @@ Open index.html file that is located target/site/cucumber-pretty
 target/site/cucumber-pretty/index.html
 ```  
 
+##### **STRUCTURE**
+
+1) The scenarios should be located at the 'test/features' folder
+2) Project properties are in the 'resources' folder.
+3) Step definition are described at 'java/steps' folder 
+4) All action and all elements on Web-page are separated by page and specified at 'java/pages' folder
+5) The API rest actions and models for this present at 'java/rest' folder
 
 

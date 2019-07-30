@@ -74,6 +74,7 @@ public class EventListPage extends BasePage {
     }
 
     public void openPage(String browserName) {
+        log.info("Starting the {} browser",browserName);
         Configuration.browser = browserName;
         Configuration.browserCapabilities.setCapability("user-agent", PropertyHolder.getPropValue("USER_AGENT"));
         Configuration.reportsFolder = "target/surefire-reports";
