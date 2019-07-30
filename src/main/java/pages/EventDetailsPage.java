@@ -34,6 +34,8 @@ public class EventDetailsPage extends BasePage {
     private final static String HISTORY_ONE_ITEM_PREVIOUS_XPATH = HISTORY_ONE_ITEM_XPATH + "//div[@class='event-table-history__previous']/span";
     private final static String HISTORY_PAGINATOR_XPATH = "//div[@class='paginatorEx']/a[contains(text(),%s)]";
 
+    //Actions with page:
+
     public void validateImportanceValue(String expectedImportanceValue) {
         $(IMPORTANCE_LABEL).shouldHave(exactText(expectedImportanceValue.toUpperCase()));
     }
@@ -91,23 +93,23 @@ public class EventDetailsPage extends BasePage {
     }
 
     public void saveTheEvents(int monthNumber) {
-        String fileName = "savedData.txt";
         log.info("Open the history content");
         $(HISTORY_CONTENT_LINK).click();
         long endOfPeriodInMs = getEndOfPeriodInMilliSeconds(monthNumber);
         log.info("The system time in millisecond in past for '{}' months is '{}' ", monthNumber, endOfPeriodInMs);
         List<String> historyList = getHistoryDataFromThePage(endOfPeriodInMs);
-        log.info("Saving the history data in the {} file", fileName);
-        saveDataInTheFile(historyList, fileName);
+        log.info("Displaying the history data in the log file");
+        printDataInTheLogFile(historyList);
     }
 
     /**
-     * Saving the data in the file regarding the required format
+     * Print the data in the log file regarding the required format
      *
      * @param historyList data that should be saved
-     * @param fileName the file, where the data are saved
      */
-    private void saveDataInTheFile(List<String> historyList, String fileName) {
+    private void printDataInTheLogFile(List<String> historyList) {
+        log.info("| Date | Actual | Forecast | Previous |");
+        historyList.forEach(log::info);
     }
 
     /**

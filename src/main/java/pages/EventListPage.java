@@ -1,15 +1,15 @@
 package pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rest.LstRest;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
 
 public class EventListPage extends BasePage {
@@ -41,14 +41,14 @@ public class EventListPage extends BasePage {
     public void filterByImportance(String importance) {
         log.info("Filtering: by Importance -> {}", importance);
         ElementsCollection elements = $$(FILTER_ALL_IMPORTANCES).exclude(text(importance));
-        elements.forEach(SelenideElement::click);
+        elements.forEach(element-> element.scrollIntoView(true).click());
     }
 
     public void filterByCurrency(String currency) {
         log.info("Filtering: by Currency -> {}", currency);
         closeCookiePopupIfPresent();
         ElementsCollection elements = $$(FILTER_BY_ALL_CURRENCIES).exclude(text(currency));
-        elements.forEach(SelenideElement::click);
+        elements.forEach(element-> element.scrollIntoView(true).click());
     }
 
     private void closeCookiePopupIfPresent() {
@@ -61,9 +61,10 @@ public class EventListPage extends BasePage {
     }
 
     public void openFirstEventFromList() {
-        if ($(FIRST_EVENT_FROM_LIST).isDisplayed()) {
+        if ($(FIRST_EVENT_FROM_LIST).scrollIntoView(true).isDisplayed()) {
             log.info("Opening first event from the events list");
             $(FIRST_EVENT_FROM_LIST).click();
+            log.info("The current URL is {} ", LstRest.createShortLink(url()));
         } else {
             log.error("There's no events for the specified filters!");
         }
