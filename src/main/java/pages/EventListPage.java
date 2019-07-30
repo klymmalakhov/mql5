@@ -1,20 +1,23 @@
 package pages;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import properties.PropertyHolder;
 import rest.LstRest;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
 
 public class EventListPage extends BasePage {
 
     private final Logger log = LoggerFactory.getLogger(EventDetailsPage.class);
+
+    private final static String PAGE_URL = "https://www.mql5.com/en/economic-calendar";
 
     // FILTER BLOCK BY DATE
     private final static By FILTER_BY_ALL_PERIODS = By.xpath("//*[@id='economicCalendarFilterDate']//li/label");
@@ -68,5 +71,12 @@ public class EventListPage extends BasePage {
         } else {
             log.error("There's no events for the specified filters!");
         }
+    }
+
+    public void openPage(String browserName) {
+        Configuration.browser = browserName;
+        Configuration.browserCapabilities.setCapability("user-agent", PropertyHolder.getPropValue("USER_AGENT"));
+        Configuration.reportsFolder = "target/surefire-reports";
+        open(PAGE_URL, EventListPage.class);
     }
 }

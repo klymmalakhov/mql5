@@ -7,10 +7,6 @@ import cucumber.api.java.en.When;
 import pages.EventDetailsPage;
 import pages.EventListPage;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.codeborne.selenide.Selenide.open;
-
 
 public class StepDefinitions {
 
@@ -19,8 +15,7 @@ public class StepDefinitions {
 
     @Given("^I open the Economic calendar page page in \"([^\"]*)\" browser$")
     public void iOpenTheEconomicCalendarPagePageInBrowser(String browserName) {
-        System.setProperty("selenide.browser", browserName);
-        open("https://www.mql5.com/en/economic-calendar", EventListPage.class);
+        eventListPage.openPage(browserName);
     }
 
     @When("^I select \"([^\"]*)\" in Period filter block$")
@@ -57,14 +52,6 @@ public class StepDefinitions {
     @Then("^I save the events for the last \"([^\"]*)\" months$")
     public void iSaveTheEventsForTheLastMonths(String monthNumber) {
         eventDetailsPage.saveTheEvents(Integer.parseInt(monthNumber));
-    }
-
-    void pause () {
-        try {
-            TimeUnit.MINUTES.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }

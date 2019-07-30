@@ -1,7 +1,8 @@
 package rest;
 
-import io.restassured.RestAssured;
+
 import io.restassured.http.ContentType;
+import properties.PropertyHolder;
 import rest.models.CreateLinkModel;
 import rest.models.DataCreateLink;
 
@@ -10,8 +11,14 @@ import static properties.PropertyHolder.getPropValue;
 
 public class LstRest {
 
+    static public String generatedShortLink;
+
+    /**
+     * Generate short link using API LST
+     * @param link source link
+     * @return generated link
+     */
     public static String createShortLink(String link) {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         DataCreateLink data = DataCreateLink.builder()
                 .data("link")
                 .url(link)
@@ -21,26 +28,31 @@ public class LstRest {
                 .data(data)
                 .build();
 
-        return
-                given()
+        generatedShortLink =
+                given().log().all()
                         .header("X-AUTH-TOKEN", getPropValue("X-AUTH-TOKEN"))
                         .header("Content-Type", ContentType.JSON)
+                        .header("user-agent", PropertyHolder.getPropValue("USER_AGENT"))
                 .when()
                         .body(body)
                         .post(getPropValue("LST_CREATE_LINK"))
                 .then()
                         .statusCode(200)
                         .extract().path("data.short");
-
+        return generatedShortLink;
     }
 
-    public static void deleteLink(String shortLink) {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    /**
+     * delete the link, that saved as static value
+     */
+    public static void deleteLink() {
+        String shortLink = generatedShortLink;
         String codeOfShortLink = shortLink.replaceAll(".*/", "");
 
         given().log().all()
                 .header("X-AUTH-TOKEN", getPropValue("X-AUTH-TOKEN"))
                 .header("Content-Type", ContentType.JSON)
+                .header("user-agent", PropertyHolder.getPropValue("USER_AGENT"))
         .when()
                 .delete(getPropValue("LST_DELETE_LINK") + codeOfShortLink)
         .then()
